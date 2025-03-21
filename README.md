@@ -54,7 +54,8 @@ a. Response HTTP disusun dengan format yang tepat, yaitu:
 b. Langkah ini menunjukkan pentingnya mengikuti standar HTTP agar browser dapat menginterpretasikan response dengan benar.
 
 Dokumentasi:
-![image](https://github.com/user-attachments/assets/3ae00e9f-ae99-4bba-b387-1e3f11f3e07b)
+![image](https://github.com/user-attachments/assets/91509cb4-530e-4be4-8fcd-9e5f62185fe8)
+
 
 ### Milestone 4
 > Add additional reflection notes, put the title clearly such as Commit 4 Reflection notes.
