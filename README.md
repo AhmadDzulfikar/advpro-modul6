@@ -56,5 +56,16 @@ b. Langkah ini menunjukkan pentingnya mengikuti standar HTTP agar browser dapat 
 Dokumentasi:
 ![image](https://github.com/user-attachments/assets/3ae00e9f-ae99-4bba-b387-1e3f11f3e07b)
 
+### Milestone 4
+> Add additional reflection notes, put the title clearly such as Commit 4 Reflection notes.
+Pada milestone ini, saya menambahkan validasi request agar server dapat merespon berdasarkan apa yang diminta oleh browser. Sebelumnya, server selalu mengembalikan halaman hello.html tanpa memperhatikan isi request.
+Poin-Poin Utama
+Pada milestone ini, saya menambahkan simulasi respons lambat dengan menyisipkan delay menggunakan `thread::sleep(Duration::from_secs(10))` ketika menerima request dengan path `/sleep`. Maka, jika pengguna mengakses URL `http://127.0.0.1:7878/sleep`, server akan menunggu 10 detik sebelum mengembalikan response.
 
-
+1. Sifat Single Threaded
+- Karena web server yang kita buat berjalan dalam satu thread, setiap request yang masuk akan diproses secara berurutan. Artinya, jika ada satu request yang membutuhkan waktu lama (misalnya, /sleep dengan delay 10 detik), request lainnya harus menunggu hingga proses tersebut selesai.
+- Hal ini mengakibatkan keterlambatan (latency) yang signifikan jika banyak pengguna mengakses server secara bersamaan. Contohnya, jika satu pengguna mengakses /sleep sementara pengguna lain mengakses root (/), maka pengguna yang mengakses / pun harus menunggu sampai delay selesai.
+  
+2. Simulasi Respons Lambat
+- Penambahan kode thread::sleep(Duration::from_secs(10)) berguna untuk mensimulasikan situasi di mana server mengalami proses yang berat atau terjadi kemacetan. Dengan simulasi ini, kita dapat melihat secara langsung dampak dari arsitektur single threaded terhadap performa server.
+- Penggunaan simulasi seperti ini sangat membantu dalam memahami kenapa server yang di-deploy di lingkungan produksi biasanya menggunakan multithreading atau asynchronous processing untuk menangani request secara paralel.
