@@ -94,3 +94,15 @@ Dengan adanya thread pool, beberapa request dapat diproses secara simultan, sehi
 Dibandingkan dengan membuat thread baru untuk setiap request, penggunaan thread pool mengurangi overhead dengan membatasi jumlah thread aktif pada waktu tertentu.
 - Skalabilitas:
 Model ini merupakan dasar yang baik untuk membangun web server yang scalable. Di aplikasi nyata, biasanya akan ditambahkan mekanisme untuk mengatur jumlah thread secara dinamis sesuai beban.
+
+### Bonus
+> Bonus
+Pada bonus ini, saya mengembangkan fungsi konstruksi pada ThreadPool dengan membuat fungsi build sebagai pengganti fungsi new. Fungsi build ini mengembalikan tipe Result<ThreadPool, PoolCreationError>, sehingga memberikan penanganan error yang lebih baik dan eksplisit jika terjadi kondisi yang tidak valid, seperti ketika ukuran pool bernilai nol.
+
+Poin-Poin yang Dipelajari
+1. Validasi Parameter Input
+- Fungsi build memeriksa nilai size dan mengembalikan error PoolCreationError::ZeroSize jika nilai tersebut nol. Dengan cara ini, kita mencegah pembuatan ThreadPool yang tidak berguna dan menghindari potensi bug di kemudian hari.
+2. Penggunaan Custom Error Type
+- Dengan mendefinisikan enum PoolCreationError yang mengimplementasikan trait Display dan Error, saya dapat memberikan pesan error yang informatif. Ini adalah praktik baik dalam pembuatan library atau aplikasi produksi, karena error handling yang eksplisit memudahkan debugging dan pemeliharaan kode.
+3. Perbaikan Desain API
+- Alih-alih langsung memanggil fungsi new yang secara implisit mengasumsikan input valid, penggunaan build memungkinkan pemanggil (caller) untuk menangani kasus error dengan lebih tepat. Misalnya, di dalam fungsi main(), jika terjadi kegagalan dalam pembuatan thread pool, error tersebut dapat di-log dan program dapat berhenti dengan aman.
