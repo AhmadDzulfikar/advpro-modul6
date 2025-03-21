@@ -70,3 +70,27 @@ Pada milestone ini, saya menambahkan simulasi respons lambat dengan menyisipkan 
 2. Simulasi Respons Lambat
 - Penambahan kode thread::sleep(Duration::from_secs(10)) berguna untuk mensimulasikan situasi di mana server mengalami proses yang berat atau terjadi kemacetan. Dengan simulasi ini, kita dapat melihat secara langsung dampak dari arsitektur single threaded terhadap performa server.
 - Penggunaan simulasi seperti ini sangat membantu dalam memahami kenapa server yang di-deploy di lingkungan produksi biasanya menggunakan multithreading atau asynchronous processing untuk menangani request secara paralel.
+
+### Milestone 5
+> Add additional reflection notes, put the title clearly such as Commit 5 Reflection notes.
+
+Pada milestone ini, saya mengubah arsitektur web server dari single-threaded menjadi multithreaded dengan menggunakan ThreadPool. Perubahan ini sangat penting untuk meningkatkan performa server, karena memungkinkan server menangani beberapa request secara bersamaan. Berikut adalah beberapa poin pembelajaran yang saya dapatkan:
+1. Pengenalan ThreadPool
+- Sebelumnya, server berjalan dalam satu thread sehingga setiap request harus menunggu jika ada request lain yang sedang diproses (misalnya, request dengan delay).
+- Dengan menggunakan ThreadPool, saya membuat sejumlah worker thread (dalam contoh ini 4 thread) yang akan mengeksekusi tugas-tugas (jobs) secara paralel. Hal ini membuat server mampu menangani lebih banyak request secara bersamaan dan meningkatkan skalabilitas.
+  
+2. Mekanisme Kerja ThreadPool
+- Pengiriman Tugas:
+Setiap request yang masuk diubah menjadi sebuah job (closure yang dikemas dalam Box<dyn FnOnce() + Send + 'static>) dan dikirim melalui channel (mpsc::Sender<Job>) ke para worker.
+- Sinkronisasi:
+Penerima (receiver) dari channel tersebut dibungkus dengan Arc<Mutex<Receiver<Job>>> agar dapat diakses secara aman oleh semua worker thread secara bersamaan.
+- Worker Thread:
+Setiap worker dalam ThreadPool menjalankan loop yang terus-menerus mencoba menerima job dari channel. Jika berhasil, worker mencetak pesan log (misalnya, “Worker {id} got a job; executing.”) dan mengeksekusi job tersebut.
+
+3. Keunggulan Pendekatan Multithreaded
+- Concurrency:
+Dengan adanya thread pool, beberapa request dapat diproses secara simultan, sehingga respons server menjadi lebih cepat meskipun ada satu atau lebih request yang memerlukan waktu lama (contohnya request /sleep).
+- Efisiensi Sumber Daya:
+Dibandingkan dengan membuat thread baru untuk setiap request, penggunaan thread pool mengurangi overhead dengan membatasi jumlah thread aktif pada waktu tertentu.
+- Skalabilitas:
+Model ini merupakan dasar yang baik untuk membangun web server yang scalable. Di aplikasi nyata, biasanya akan ditambahkan mekanisme untuk mengatur jumlah thread secara dinamis sesuai beban.
