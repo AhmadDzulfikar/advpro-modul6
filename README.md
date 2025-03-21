@@ -52,3 +52,9 @@ a. Response HTTP disusun dengan format yang tepat, yaitu:
   - Dua baris kosong (`\r\n\r\n`) yang memisahkan header dengan body.
   - Body yang berisi isi file HTML yang diambil dari file hello.html atau 404.html.
 b. Langkah ini menunjukkan pentingnya mengikuti standar HTTP agar browser dapat menginterpretasikan response dengan benar.
+
+Dokumentasi:
+![image](https://github.com/user-attachments/assets/3ae00e9f-ae99-4bba-b387-1e3f11f3e07b)
+
+
+
