@@ -32,3 +32,23 @@ Sebelum mengirim response, saya menghitung panjang dari konten HTML yang dihasil
 
 Dokumentasi:
 ![image](https://github.com/user-attachments/assets/e0d7a9e0-083d-43f8-860d-6b4bf708cba5)
+
+### Milestone 3
+> Add additional reflection notes, put the title clearly such as Commit 3 Reflection notes.
+Pada milestone ini, saya menambahkan validasi request agar server dapat merespon secara selektif berdasarkan apa yang diminta oleh browser. Sebelumnya, server selalu mengembalikan halaman hello.html tanpa memperhatikan isi request.
+Poin-Poin Utama
+1. Validasi Request
+a. Server membaca baris pertama dari request menggunakan `BufReader::lines().next().` Baris ini merupakan request line (misalnya, `"GET / HTTP/1.1"`).
+b. Dengan melakukan pengecekan terhadap request line, saya bisa menentukan respons yang tepat. Jika request line sama dengan `"GET / HTTP/1.1"`, maka server mengirimkan halaman hello.html dengan status 200 OK. Jika tidak, maka server mengirimkan halaman 404.html dengan status `404 NOT FOUND`.
+   
+2. Pemisahan Logika Response
+a. Penggunaan conditional expression (`if ... else ...`) untuk mengatur tuple (`status_line`, `filename`) memungkinkan pemisahan logika respons. Hal ini memudahkan penambahan route baru atau penyesuaian validasi di masa mendatang.
+b. Refactoring ini meningkatkan keterbacaan kode karena respons yang dikirim sudah terstruktur dengan jelas berdasarkan validasi request.
+
+3. Penyusunan Response HTTP yang Benar
+a. Response HTTP disusun dengan format yang tepat, yaitu:
+  - Baris status (misalnya, `HTTP/1.1 200 OK` atau `HTTP/1.1 404 NOT FOUND`).
+  - Header, seperti `Content-Length`, yang berisi panjang dari konten HTML.
+  - Dua baris kosong (`\r\n\r\n`) yang memisahkan header dengan body.
+  - Body yang berisi isi file HTML yang diambil dari file hello.html atau 404.html.
+b. Langkah ini menunjukkan pentingnya mengikuti standar HTTP agar browser dapat menginterpretasikan response dengan benar.
